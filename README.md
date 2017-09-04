@@ -1,1 +1,1 @@
-# rr-quiz
+# Universal react boilerplate

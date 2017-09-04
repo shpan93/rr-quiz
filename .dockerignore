@@ -1,0 +1,6 @@
+.idea
+*.md
+.gitignore
+.git
+node_modules
+k8s
