@@ -1,25 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import {
-  TextField
-} from 'material-ui';
+import { TextField, AutoComplete, SelectField, MenuItem } from 'material-ui';
 import ElementValidation from './validation';
-
-const renderTextField = ({
-                           input,
-                           label,
-                           meta: { touched, error },
-                           ...custom
-                         }) => (
-  <TextField
-    hintText={label}
-    floatingLabelText={label}
-    errorText={touched && error}
-    {...input}
-    {...custom}
-  />
-)
 
 class Navigation extends React.PureComponent {
   static propTypes = {
@@ -29,9 +12,76 @@ class Navigation extends React.PureComponent {
 
   elements = {
     string: {
-      component: renderTextField,
+      component: this.renderTextField,
+    },
+    autocomplete: {
+      component: this.renderAutoComplete,
+    },
+    select: {
+      component: this.renderSelectField,
     },
   };
+
+  renderTextField(field) {
+    const {
+      input,
+      label,
+      meta: { touched, error },
+      ...custom
+    } = field;
+
+    return (
+      <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+      />
+    );
+  }
+
+  renderAutoComplete(field) {
+    return (
+      <AutoComplete
+        searchText={field.input.value}
+        dataSource={field.elementProps.options}
+        dataSourceConfig={{ text: 'label', value: 'value' }}
+        filter={AutoComplete.caseInsensitiveFilter}
+        onUpdateInput={field.input.onChange}
+        maxSearchResults={7}
+        openOnFocus={true}
+      />
+    );
+  }
+
+  renderSelectField(field) {
+    const {
+      input,
+      label,
+      meta: { touched, error },
+      elementProps,
+      ...custom
+    } = field;
+
+    return (
+      <SelectField
+        floatingLabelText={label}
+        errorText={touched && error}
+        {...input}
+        onChange={(event, index, value) => {
+          input.onChange(value);
+        }}
+        {...custom}
+      >
+        {elementProps.options.map((option) => {
+          return (
+            <MenuItem key={option.value} value={option.value} primaryText={option.label} />
+          );
+        })}
+      </SelectField>
+    );
+  }
 
   isElementValid = (value) => {
     const valid = new ElementValidation(value, this.props.element.validation).isValid();
@@ -52,6 +102,7 @@ class Navigation extends React.PureComponent {
           name={`${this.props.stepId}.${this.props.element.id}`}
           component={element.component}
           validate={[this.isElementValid]}
+          elementProps={this.props.element}
           {...elementProps}
         />
       );

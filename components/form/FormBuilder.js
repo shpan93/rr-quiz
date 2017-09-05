@@ -31,11 +31,6 @@ export class FormBuilder extends React.Component {
 
   navigateForward() {
     this.props.handleSubmit(::this.onSubmit)();
-    // if (this.isLastStep()) {
-    //   this.props.handleSubmit(::this.onSubmit);
-    // } else {
-    //   this.navigate(this.props.step + 1);
-    // }
   };
 
   navigateBack = () => {
@@ -76,7 +71,7 @@ export class FormBuilder extends React.Component {
             disabled={step === 1}
             disableTouchRipple={true}
             disableFocusRipple={true}
-            onClick={this.navigateBack}
+            onClick={::this.navigateBack}
           />
         )}
         <RaisedButton
@@ -94,7 +89,6 @@ export class FormBuilder extends React.Component {
       return (
         <Stepper
           activeStep={this.props.step - 1}
-          linear={false}
           orientation="vertical"
         >
           {this.props.schema.steps.map(::this.renderStep)}

@@ -44,10 +44,19 @@ export default class ElementValidation {
   }
 
   isValidPattern() {
-    if (this.validation.pattern) {
+    if (this.validation && this.validation.pattern) {
       switch (this.validation.pattern) {
         case 'email': {
           return isValidEmail(this.value);
+        }
+        case 'postCode': {
+          return isValidPostCode(this.value);
+        }
+        case 'digits': {
+          return isValidDigit(parseInt(this.value, 10), this.validation);
+        }
+        case 'phonenumber': {
+          return isPhoneNumber(this.value);
         }
         default: {
           return true;
@@ -69,4 +78,24 @@ function isValidLength(value, min, max) {
 
 function isValidEmail(value) {
   return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
+}
+
+function isPhoneNumber(value) {
+  return /^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(value);
+}
+
+function isValidPostCode(value) {
+  return /^([0-9]{5})(?:[-\s]*([0-9]{4}))?$/.test(value);
+}
+
+function isValidDigit(value, validation) {
+  return /\d/.test(value) && isValidDigitValidation(value, validation);
+}
+
+function isValidDigitValidation(value, validation) {
+  if (validation && Object.hasOwnProperty.call(validation, 'greaterThan')) {
+    return value > validation.greaterThan;
+  }
+
+  return true;
 }
