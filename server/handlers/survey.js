@@ -4,7 +4,7 @@ import fs from 'fs';
 const survey = new Router();
 const availableLanguages = ['en'];
 
-survey.use((req, res, next) => {
+survey.use('/:language', (req, res, next) => {
   if (!(req.params.language && availableLanguages.includes(req.params.language))) {
     res.status(422).send('INVALID_LANGUAGE');
     return;
@@ -23,6 +23,7 @@ survey.get('/:language', async (req, res) => {
       i18n,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).send('Server error. Cannot read data.');
   }
 });
@@ -35,7 +36,13 @@ function getFileAsync(path) {
         return;
       }
 
-      resolve(JSON.parse(data));
+      try {
+        const parsedData = JSON.parse(data);
+        resolve(parsedData);
+      } catch (e) {
+        reject(e);
+      }
+
     });
   });
 }

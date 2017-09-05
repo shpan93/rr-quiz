@@ -1,6 +1,7 @@
 {
   "steps": [
     {
+      "id": "stage-1",
       "label": "Stage 1",
       "text": "RocketRoute would like to give you the best product. This survey will take few seconds.",
       "elements": [
@@ -19,9 +20,8 @@
           "type": "string",
           "text": "I’m using {element} email",
           "validation": {
-            "minLength": 3,
-            "maxLength": 255,
-            "pattern": "email"
+            "pattern": "email",
+            "required": "true"
           }
         },
         {
@@ -29,7 +29,8 @@
           "type": "string",
           "text": "And my phone number is {element}",
           "validation": {
-            "pattern": "mobilenumber"
+            "pattern": "email",
+            "required": "true"
           }
         }
       ]

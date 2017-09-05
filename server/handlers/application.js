@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { match } from 'react-router';
 import createMemoryHistory from 'react-router/lib/createMemoryHistory';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Root from '../../components/Root';
 import Html from '../../components/server/Html';
 import configureStore from '../../redux/configureStore';
@@ -21,9 +22,12 @@ export default (req, res) => {
     } else if (error) {
       res.send(error);
     } else if (renderProps) {
+      const muiTheme = getMuiTheme({
+        userAgent: req.headers['user-agent'],
+      });
       const html = ReactDOM.renderToStaticMarkup(
         <Html store={store} >
-          <Root isServer={true} store={store} renderProps={renderProps} />
+          <Root isServer={true} store={store} renderProps={renderProps} muiTheme={muiTheme} />
         </Html>,
       );
       res.status(200).type('html').send(`<!DOCTYPE html>${html}`);
