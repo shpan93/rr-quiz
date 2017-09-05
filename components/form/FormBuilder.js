@@ -1,88 +1,132 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 import {
-  Checkbox,
-  RadioButtonGroup,
-  SelectField,
-  TextField,
-  Toggle,
-  DatePicker
-} from 'redux-form-material-ui';
-import { reduxForm, Field } from 'redux-form';
-import ElementValidation from './validation';
+  Step,
+  Stepper,
+  StepButton,
+  StepContent,
+} from 'material-ui/Stepper';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import { reduxForm } from 'redux-form';
+import Field from './Field';
 
 
 export class FormBuilder extends React.Component {
   static propTypes = {
     schema: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired,
+    step: PropTypes.number.isRequired,
   };
 
-  invokers = {
-    string: this.renderInput,
+  navigate(step) {
+    this.props.push(`/survey/${step}`);
+  }
+
+  isLastStep() {
+    return this.props.step === this.props.schema.steps.length;
+  }
+
+  navigateForward() {
+    this.props.handleSubmit(::this.onSubmit)();
+    // if (this.isLastStep()) {
+    //   this.props.handleSubmit(::this.onSubmit);
+    // } else {
+    //   this.navigate(this.props.step + 1);
+    // }
   };
 
-  renderInput(stepId, element) {
-    const textList = element.text.split(' ');
-    const elements = textList.map((textEl) => {
-      if(textEl === '{element}'){
-        const isElementValid = (value) => {
-          const valid = new ElementValidation(value, element.validation).isValid();
-          return valid;
-        };
-        return <Field key={element.id} name={`${stepId}.${element.id}`} component={TextField} validate={[isElementValid]}/>;
-      }
+  navigateBack = () => {
+    if (this.props.step > 1) {
+      this.navigate(this.props.step - 1);
+    }
+  };
 
-      return (
-        <span>{textEl} </span>
-      );
-    })
+  renderStep(step, i) {
     return (
-      <div className="input-wrapper">
-        {elements}
+      <Step key={step.id}>
+        <StepButton
+          onClick={() => {
+            this.navigate(i + 1);
+          }}
+        >
+          {step.text}
+        </StepButton>
+        <StepContent>
+          {step.elements.map((element) => {
+            return (
+              <Field stepId={step.id} element={element} />
+            );
+          })}
+          {this.renderStepActions()}
+        </StepContent>
+      </Step>
+    );
+  }
+
+  renderStepActions() {
+    const step = this.props.step;
+    return (
+      <div style={{ margin: '12px 0' }}>
+        {step > 1 && (
+          <FlatButton
+            label="Back"
+            disabled={step === 1}
+            disableTouchRipple={true}
+            disableFocusRipple={true}
+            onClick={this.navigateBack}
+          />
+        )}
+        <RaisedButton
+          label={this.isLastStep() ? 'Submit' : 'Next'}
+          primary={true}
+          onClick={::this.navigateForward}
+          style={{ marginRight: 12 }}
+        />
       </div>
     );
   }
 
-  renderElement(segmentId, element) {
-    const invoker = this.invokers[element.type];
-    if (invoker) {
-      return invoker.call(this, segmentId, element);
-    }
-
-    return null;
-  }
-
-  renderStep(segment) {
-    return (
-      <div>Segment</div>
-    );
-  }
-
   renderSteps() {
-    if (this.props.schema) {
-      return this.props.schema.steps.map((step) => {
-        return (
-          <div className="wizard" key={step.id}>
-            {step.text}
-
-            {step.elements.map((element) => {
-              return this.renderElement(step.id, element);
-            })}
-          </div>
-        );
-      });
+    if (this.props.schema && Array.isArray(this.props.schema.steps)) {
+      return (
+        <Stepper
+          activeStep={this.props.step - 1}
+          linear={false}
+          orientation="vertical"
+        >
+          {this.props.schema.steps.map(::this.renderStep)}
+        </Stepper>
+      );
     }
 
     return null;
+  }
+
+  onSubmit(values) {
+    if (this.isLastStep()) {
+      console.log(values)
+    } else {
+      this.navigate(this.props.step + 1);
+    }
   }
 
   render() {
-    return <div>
-      {this.renderSteps()}
-    </div>;
+    return (
+      <form  noValidate ref="form">
+        {this.renderSteps()}
+      </form>
+    );
   }
 }
 
-export default reduxForm({
+const wrappedFormBuilder = reduxForm({
   form: 'myForm',
+  destroyOnUnmount: false, // <------ preserve form data
+  forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
 })(FormBuilder);
+
+export default connect(null, { push })(wrappedFormBuilder);
+

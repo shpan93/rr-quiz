@@ -1,8 +1,8 @@
 {
   "steps": [
     {
-      "id": "stage-1",
-      "label": "Stage 1",
+      "id": "personal-info",
+      "label": "Personal information",
       "text": "RocketRoute would like to give you the best product. This survey will take few seconds.",
       "elements": [
         {
@@ -29,11 +29,103 @@
           "type": "string",
           "text": "And my phone number is {element}",
           "validation": {
-            "pattern": "email",
+            "pattern": "phonenumber"
+          }
+        }
+      ]
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "text": "We need your address to confirm our best offer.",
+      "elements": [
+        {
+          "id": "country",
+          "type": "googleautocomplete",
+          "text": "I live in {element}",
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "id": "zip",
+          "type": "string",
+          "text": "My zip code is {element}",
+          "validation": {
+            "pattern": "areaCode",
+            "required": "true"
+          }
+        }
+      ]
+    },
+    {
+      "id": "general-information",
+      "label": "General Information",
+      "text": "These answers provides deeper insights to craft something special.",
+      "elements": [
+        {
+          "id": "income",
+          "type": "number",
+          "text": "My family makes $ {element} per year",
+          "validation": {
+            "required": true,
+            "greaterThan": 0
+          }
+        },
+        {
+          "id": "family-members",
+          "type": "select",
+          "text": "There is {element} person in my tax household",
+          "options": [
+            {
+              "value": 1,
+              "label": 1
+            },
+            {
+              "value": 2,
+              "label": 2
+            },
+            {
+              "value": 3,
+              "label": 3
+            },
+            {
+              "value": 4,
+              "label": 4
+            },
+            {
+              "value": 5,
+              "label": 5
+            },
+            {
+              "value": 6,
+              "label": 6
+            },
+            {
+              "value": 7,
+              "label": 7
+            },
+            {
+              "value": 8,
+              "label": 8
+            },
+            {
+              "value": 9,
+              "label": 9
+            },
+            {
+              "value": 10,
+              "label": 10
+            }
+          ],
+          "validation": {
             "required": "true"
           }
         }
       ]
     }
-  ]
+  ],
+  "final": {
+    "text": "Thanks for your answers. We will get back to you within 24 hours withour amazing product."
+  }
 }
