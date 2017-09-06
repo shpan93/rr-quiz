@@ -9,7 +9,7 @@ This is an universal react application, built on top of React and Express.js, wh
 
 Forms are dynamically built by content data, which is stored in /data/schema.en.json and /data/translations.en.json.
 
-###Installation
+### Installation
 
 ```
 yarn install
@@ -21,13 +21,13 @@ or
 npm install
 ```
 
-###Development
+### Development
 This task will start nodemon and webpack-dev-server with react-hot-loader.
 ```
 yarn run dev
 ```
 
-###Build
+### Build
 This task will build minified js bundle and will extract styles to style.css.
 ```
 yarn run build
