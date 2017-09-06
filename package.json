@@ -16,10 +16,10 @@
     "start": "NODE_ENV=production node server.js",
     "stylelint": "stylelint \"sass/**/*.scss\" --syntax scss; exit 0"
   },
-//  "pre-push": [
-//    "lint",
-//    "stylelint"
-//  ],
+  "pre-push": [
+    "lint",
+    "stylelint"
+  ],
   "repository": {
     "type": "git",
     "url": ""

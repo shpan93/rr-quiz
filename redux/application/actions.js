@@ -20,7 +20,7 @@ export function fetchContent() {
 export function sendSurvey(data) {
   return (dispatch) => {
     return axios.post('http://localhost:8080/survey-api', data).then(() => {
-      dispatch(push('/survey/finish'));
+      dispatch(push('/survey/complete'));
     });
   };
 }

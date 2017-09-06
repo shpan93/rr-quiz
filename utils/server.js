@@ -6,15 +6,13 @@ export const serverSideFetch = (store, renderProps) => {
     return component && component.reduxAction;
   });
 
-  let result = Promise.resolve;
   if (filteredComponents.length > 0) {
-    const promises = filteredComponents.map(({reduxAction}) => {
+    const promises = filteredComponents.map(({ reduxAction }) => {
       return dispatch(reduxAction(store, renderProps));
     });
 
-    result = () => {
-      return Promise.all(promises);
-    };
+    return Promise.all(promises);
   }
-  return result();
+
+  return Promise.resolve();
 };

@@ -18,27 +18,27 @@ export default (req, res) => {
     routes: getRoutes(store),
     location: req.originalUrl,
   }, (error, redirectLocation, renderProps) => {
-    serverSideFetch(store, renderProps).then(() => {
-      if (redirectLocation) {
-        res.redirect(redirectLocation.pathname + redirectLocation.search);
-      } else if (error) {
-        res.send(error);
-      } else if (renderProps) {
+    if (redirectLocation) {
+      res.redirect(redirectLocation.pathname + redirectLocation.search);
+    } else if (error) {
+      res.send(error);
+    } else if (renderProps) {
+      serverSideFetch(store, renderProps).then(() => {
         const muiTheme = getMuiTheme({
           userAgent: req.headers['user-agent'],
         });
         const html = ReactDOM.renderToStaticMarkup(
           <Html store={store}>
-          <Root isServer={true} store={store} renderProps={renderProps} muiTheme={muiTheme} />
+            <Root isServer={true} store={store} renderProps={renderProps} muiTheme={muiTheme} />
           </Html>,
         );
         res.status(200).type('html').send(`<!DOCTYPE html>${html}`);
-      } else {
-        res.status(404).send('not found');
-      }
-    }).catch((e) => {
-      console.error(e)
-      res.status(500).send(e);
-    });
+      }).catch((e) => {
+        console.error(e);
+        res.status(500).send(e);
+      });
+    } else {
+      res.status(404).send('not found');
+    }
   });
 };

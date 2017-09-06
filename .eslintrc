@@ -28,6 +28,7 @@
       "allowForLoopAfterthoughts": true
     }],
     "import/no-dynamic-require": "off",
+    "import/prefer-default-export": "off",
     "react/jsx-filename-extension": "off",
     "no-underscore-dangle": "off",
     "import/no-named-as-default": "off",

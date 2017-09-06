@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
@@ -12,6 +13,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { reduxForm } from 'redux-form';
 import Field from './Field';
+import SchemaStep from './SchemaStep';
 import { media } from '../../utils/browser';
 import { sendSurvey, getTranslation } from '../../redux/application/actions';
 
@@ -107,21 +109,14 @@ export class FormBuilder extends React.Component {
 
   renderSchemaStep(step) {
     return (
-      <div className="step">
-        <h3 className="step-headline">
-          {step.text}
-        </h3>
-        <div className="step-elements-holder">
-          <div className="step-elements">
-            {step.elements.map((element) => {
-              return (
-                <Field key={`${step.id}.${element.id}`} stepId={step.id} element={element} />
-              );
-            })}
-            {this.renderStepActions()}
-          </div>
-        </div>
-      </div>
+      <SchemaStep step={step}>
+        {step.elements.map((element) => {
+          return (
+            <Field key={`${step.id}.${element.id}`} stepId={step.id} element={element} />
+          );
+        })}
+        {this.renderStepActions()}
+      </SchemaStep>
     );
   }
 
@@ -153,8 +148,7 @@ export class FormBuilder extends React.Component {
           primary={true}
           onClick={this.navigateForward}
           style={{ marginRight: 12 }}
-        >
-        </RaisedButton>
+        />
       </div>
     );
   }
@@ -217,4 +211,3 @@ export default connect((state) => {
     schema: state.application.schema,
   };
 }, { push, getTranslation, sendSurvey })(wrappedFormBuilder);
-
