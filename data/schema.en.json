@@ -1067,7 +1067,7 @@
       "elements": [
         {
           "id": "income",
-          "type": "string",
+          "type": "number",
           "text": "My family makes $ {element} per year",
           "validation": {
             "required": true,
@@ -1128,7 +1128,7 @@
       ]
     }
   ],
-  "final": {
+  "complete": {
     "text": "Thanks for your answers. We will get back to you within 24 hours withour amazing product."
   }
 }

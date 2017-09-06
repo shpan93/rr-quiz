@@ -7,6 +7,7 @@ import Root from '../../components/Root';
 import Html from '../../components/server/Html';
 import configureStore from '../../redux/configureStore';
 import getRoutes from '../../routes/routes';
+import { serverSideFetch } from '../../utils/server';
 
 export default (req, res) => {
   const memoryHistory = createMemoryHistory(req.originalUrl);
@@ -17,22 +18,27 @@ export default (req, res) => {
     routes: getRoutes(store),
     location: req.originalUrl,
   }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      res.send(error);
-    } else if (renderProps) {
-      const muiTheme = getMuiTheme({
-        userAgent: req.headers['user-agent'],
-      });
-      const html = ReactDOM.renderToStaticMarkup(
-        <Html store={store} >
+    serverSideFetch(store, renderProps).then(() => {
+      if (redirectLocation) {
+        res.redirect(redirectLocation.pathname + redirectLocation.search);
+      } else if (error) {
+        res.send(error);
+      } else if (renderProps) {
+        const muiTheme = getMuiTheme({
+          userAgent: req.headers['user-agent'],
+        });
+        const html = ReactDOM.renderToStaticMarkup(
+          <Html store={store}>
           <Root isServer={true} store={store} renderProps={renderProps} muiTheme={muiTheme} />
-        </Html>,
-      );
-      res.status(200).type('html').send(`<!DOCTYPE html>${html}`);
-    } else {
-      res.status(404).send('not found');
-    }
+          </Html>,
+        );
+        res.status(200).type('html').send(`<!DOCTYPE html>${html}`);
+      } else {
+        res.status(404).send('not found');
+      }
+    }).catch((e) => {
+      console.error(e)
+      res.status(500).send(e);
+    });
   });
 };

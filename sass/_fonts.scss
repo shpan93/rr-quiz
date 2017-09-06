@@ -1,4 +1,4 @@
-@mixin fontFace($FontName, $FontPathName ) {
+@mixin fontFace($FontName, $FontPathName : $FontName ) {
   @font-face {
     font-family: '#{$FontName}';
     src:	url('/assets/fonts/#{$FontPathName}.eot');
@@ -20,3 +20,9 @@
     line-height: $lh;
   }
 }
+
+$ff-narrow: 'ffpronarrow';
+$ff-thin: 'ffprothin';
+
+@include fontFace($ff-narrow);
+@include fontFace($ff-thin);

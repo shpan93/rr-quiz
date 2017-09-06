@@ -1,0 +1,51 @@
+#survey {
+  min-height: calc(100vh - 1px);
+  display: flex;
+  flex-flow: column;
+
+  .stepper {
+    margin: 25px 0;
+  }
+
+  .wrapper, .form, .steps, .step {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
+  .step {
+    .step-headline {
+      text-align: center;
+
+      @media (max-width: 991px) {
+        margin-bottom: 25px;
+      }
+    }
+
+    .step-elements-holder {
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 991px) {
+      margin: 20px 0;
+    }
+  }
+
+  .input-wrapper {
+    min-height: 65px;
+
+    span {
+      vertical-align: top;
+      line-height: 48px;
+    }
+
+    .field-wrapper {
+      display: inline-block;
+    }
+  }
+}

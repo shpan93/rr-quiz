@@ -1,42 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import FormBuilder from '../form/FormBuilder';
-import Navigation from '../shared/Navigation';
+import { fetchContent } from '../../redux/application/actions';
 
-class MainPage extends React.PureComponent {
+class Survey extends React.PureComponent {
+  static reduxAction = fetchContent;
+
   static propTypes = {
     params: PropTypes.shape({
       step: PropTypes.string.isRequired,
     }).isRequired,
   };
-  static defaultProps = {};
-
-  state = {
-    data: null,
-  };
-
-  componentDidMount() {
-    axios.get('http://localhost:8080/survey-api/en').then(({ data }) => {
-      this.setState({
-        data,
-      });
-    });
-  }
 
   render() {
-    if (this.state.data) {
-      return (
-        <div id="survey" className="page">
-          <FormBuilder schema={this.state.data.schema} step={parseInt(this.props.params.step)} />
-        </div>
-      );
-    }
-
     return (
-      <div>Loading</div>
+      <div id="survey" className="page">
+        <div className="wrapper">
+          <FormBuilder step={parseInt(this.props.params.step, 10)} />
+        </div>
+      </div>
     );
   }
 }
 
-export default MainPage;
+export default Survey;

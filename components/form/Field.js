@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Field as ReduxFormField } from 'redux-form';
 import { TextField, AutoComplete, SelectField, MenuItem } from 'material-ui';
 import ElementValidation from './validation';
 
-class Navigation extends React.PureComponent {
+class Field extends React.PureComponent {
   static propTypes = {
     element: PropTypes.object.isRequired,
     stepId: PropTypes.string.isRequired,
@@ -13,6 +13,16 @@ class Navigation extends React.PureComponent {
   elements = {
     string: {
       component: this.renderTextField,
+    },
+    number: {
+      component: this.renderTextField,
+      getProps: () => {
+        return {
+          style: {
+            maxWidth: 100,
+          },
+        };
+      },
     },
     autocomplete: {
       component: this.renderAutoComplete,
@@ -27,6 +37,7 @@ class Navigation extends React.PureComponent {
       input,
       label,
       meta: { touched, error },
+      elementProps,
       ...custom
     } = field;
 
@@ -35,6 +46,9 @@ class Navigation extends React.PureComponent {
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
+        style={{
+          maxWidth: 200,
+        }}
         {...input}
         {...custom}
       />
@@ -72,6 +86,11 @@ class Navigation extends React.PureComponent {
         onChange={(event, index, value) => {
           input.onChange(value);
         }}
+        style={{
+          maxWidth: 90,
+          marginLeft: 10,
+          marginRight: 10,
+        }}
         {...custom}
       >
         {elementProps.options.map((option) => {
@@ -97,14 +116,15 @@ class Navigation extends React.PureComponent {
     if (element) {
       const elementProps = element.getProps ? element.getProps(this.props.element) : {};
       return (
-        <Field
-          key={this.props.element.id}
-          name={`${this.props.stepId}.${this.props.element.id}`}
-          component={element.component}
-          validate={[this.isElementValid]}
-          elementProps={this.props.element}
-          {...elementProps}
-        />
+        <div className="field-wrapper" key={this.props.element.id}>
+          <ReduxFormField
+            name={`${this.props.stepId}.${this.props.element.id}`}
+            component={element.component}
+            validate={[this.isElementValid]}
+            elementProps={this.props.element}
+            {...elementProps}
+          />
+        </div>
       );
     }
 
@@ -137,4 +157,4 @@ class Navigation extends React.PureComponent {
   }
 }
 
-export default Navigation;
+export default Field;
