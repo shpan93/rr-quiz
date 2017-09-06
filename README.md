@@ -1,3 +1,5 @@
+![rr preview](https://zippy.gfycat.com/IdenticalAmusedIvorybackedwoodswallow.gif)
+
 # RR survey
 This is an universal react application, built on top of React and Express.js, which uses
 * React-router as an universal router
