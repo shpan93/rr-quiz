@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux';
 import * as constants from './constants';
-import { getGetRequest, getPostRequest} from '../../utils/api';
+import { getGetRequest, getPostRequest } from '../../utils/api';
 
 export function saveContent(payload) {
   return {

@@ -3,7 +3,7 @@ import getEnvironment from './environment';
 
 const apiConfig = {
   local: 'http://localhost:8080/',
-  production: 'https://rr-survey.herokuapp.com',
+  production: 'https://rr-survey.herokuapp.com/',
 };
 
 export function getGetRequest(url) {
