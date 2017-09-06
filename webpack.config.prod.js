@@ -21,7 +21,8 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin({
       compressor: { warnings: false },
     }),
-    new ExtractTextPlugin({ filename: 'style.css',
+    new ExtractTextPlugin({
+      filename: 'style.css',
       allChunks: true,
     }),
     new webpack.DefinePlugin({
@@ -52,19 +53,20 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader:
-                ExtractTextPlugin.extract({ fallback: 'style-loader',
-                  use: [
-                    'css-loader',
-                    {
-                      loader: 'postcss-loader',
-                      options: {
-                        plugins: () => {
-                          return [autoprefixer({ browsers: ['> 1%', 'last 10 versions'] })];
-                        },
-                      },
-                    },
-                    'sass-loader'] }),
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => {
+                  return [autoprefixer({ browsers: ['> 1%', 'last 10 versions'] })];
+                },
+              },
+            },
+            'sass-loader'],
+        }),
       },
     ],
   },

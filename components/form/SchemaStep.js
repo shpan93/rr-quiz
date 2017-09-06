@@ -18,11 +18,13 @@ class SchemaStep extends React.PureComponent {
           <h3 className="step-headline">
             {this.props.step.text}
           </h3>
-          <div className="step-elements-holder">
-            <div className="step-elements">
-              {this.props.children}
+          {this.props.children && (
+            <div className="step-elements-holder">
+              <div className="step-elements">
+                {this.props.children}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       );
     }
