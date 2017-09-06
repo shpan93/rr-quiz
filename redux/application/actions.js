@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { push } from 'react-router-redux';
 import * as constants from './constants';
+import { getGetRequest, getPostRequest} from '../../utils/api';
 
 export function saveContent(payload) {
   return {
@@ -11,7 +11,7 @@ export function saveContent(payload) {
 
 export function fetchContent() {
   return (dispatch) => {
-    return axios.get('http://localhost:8080/survey-api/en').then(({ data }) => {
+    return getGetRequest('survey-api/en').then(({ data }) => {
       dispatch(saveContent(data));
     });
   };
@@ -19,7 +19,7 @@ export function fetchContent() {
 
 export function sendSurvey(data) {
   return (dispatch) => {
-    return axios.post('http://localhost:8080/survey-api', data).then(() => {
+    return getPostRequest('survey-api', data).then(() => {
       dispatch(push('/survey/complete'));
     });
   };
